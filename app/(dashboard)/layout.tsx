@@ -1,4 +1,7 @@
 'use client';
+import type { Metadata } from 'next';
+import { Inter } from 'next/font/google';
+import './globals.css';
 
 import { useEffect, useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
@@ -20,6 +23,26 @@ import {
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+
+
+onst inter = Inter({ subsets: ['latin'] });
+
+export const metadata: Metadata = {
+  title: 'ProDev Task Manager',
+  description: 'Modern task management for teams',
+};
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <html lang="en">
+      <body className={inter.className}>{children}</body>
+    </html>
+  );
+}
 
 export default function DashboardLayout({
   children,
