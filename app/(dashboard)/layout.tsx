@@ -21,11 +21,24 @@ import {
   X,
   Bell,
 } from 'lucide-react';
+
+import { ClerkProvider } from '@clerk/nextjs';
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <ClerkProvider>
+      <html lang="en">
+        <body>{children}</body>
+      </html>
+    </ClerkProvider>
+  );
+}
+
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 
 
-onst inter = Inter({ subsets: ['latin'] });
+const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
   title: 'ProDev Task Manager',
