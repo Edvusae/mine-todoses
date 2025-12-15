@@ -1,6 +1,6 @@
 'use client';
 
-import { useUser } from '@clerk/nextjs';
+import { useAuth, useUser } from '@clerk/nextjs';
 import { useRouter, usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
@@ -28,18 +28,19 @@ export default function DashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const { isLoaded, isSignedIn, user } = useUser();
+  const { isLoaded, userId } = useAuth();
+  const { user } = useUser();
   const router = useRouter();
   const pathname = usePathname();
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   useEffect(() => {
-    if (isLoaded && !isSignedIn) {
+    if (isLoaded && !userId) {
       router.push('/sign-in');
     }
-  }, [isLoaded, isSignedIn, router]);
+  }, [isLoaded, userId, router]);
 
-  if (!isLoaded || !isSignedIn) {
+  if (!isLoaded) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600"></div>
@@ -47,6 +48,9 @@ export default function DashboardLayout({
     );
   }
 
+  if (!userId) {
+    return null;
+  }
   // Determine user role from metadata or default to 'user'
   const userRole = (user.publicMetadata?.role as string) || 'user';
 
