@@ -1,10 +1,8 @@
 'use client';
-import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
-import './globals.css';
 
-import { useEffect, useState } from 'react';
+import { useUser } from '@clerk/nextjs';
 import { useRouter, usePathname } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import {
@@ -21,67 +19,36 @@ import {
   X,
   Bell,
 } from 'lucide-react';
-
-import { ClerkProvider } from '@clerk/nextjs';
-
-export default function RootLayout({ children }: { children: React.ReactNode }) {
-  return (
-    <ClerkProvider>
-      <html lang="en">
-        <body>{children}</body>
-      </html>
-    </ClerkProvider>
-  );
-}
-
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-
-
-const inter = Inter({ subsets: ['latin'] });
-
-export const metadata: Metadata = {
-  title: 'ProDev Task Manager',
-  description: 'Modern task management for teams',
-};
-
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  return (
-    <html lang="en">
-      <body className={inter.className}>{children}</body>
-    </html>
-  );
-}
+import { SignOutButton } from '@clerk/nextjs';
 
 export default function DashboardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const { isLoaded, isSignedIn, user } = useUser();
   const router = useRouter();
   const pathname = usePathname();
-  const [user, setUser] = useState<any>(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   useEffect(() => {
-    const userData = localStorage.getItem('user');
-    if (!userData) {
-      router.push('/login');
-      return;
+    if (isLoaded && !isSignedIn) {
+      router.push('/sign-in');
     }
-    setUser(JSON.parse(userData));
-  }, [router]);
+  }, [isLoaded, isSignedIn, router]);
 
-  const handleLogout = () => {
-    localStorage.removeItem('user');
-    router.push('/login');
-  };
+  if (!isLoaded || !isSignedIn) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600"></div>
+      </div>
+    );
+  }
 
-  if (!user) return null;
+  // Determine user role from metadata or default to 'user'
+  const userRole = (user.publicMetadata?.role as string) || 'user';
 
   const userNavigation = [
     { name: 'Dashboard', href: '/user', icon: LayoutDashboard },
@@ -100,7 +67,7 @@ export default function DashboardLayout({
     { name: 'Settings', href: '/admin/settings', icon: Settings },
   ];
 
-  const navigation = user.role === 'admin' ? adminNavigation : userNavigation;
+  const navigation = userRole === 'admin' ? adminNavigation : userNavigation;
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -129,7 +96,7 @@ export default function DashboardLayout({
               </div>
               <div>
                 <h1 className="font-bold text-lg">ProDev</h1>
-                <p className="text-xs text-gray-500 capitalize">{user.role}</p>
+                <p className="text-xs text-gray-500 capitalize">{userRole}</p>
               </div>
             </div>
           </div>
@@ -167,31 +134,36 @@ export default function DashboardLayout({
           {/* User Profile */}
           <div className="p-4 border-t border-gray-200">
             <div className="flex items-center gap-3 mb-3">
-              {user.avatar ? (
+              {user.imageUrl ? (
                 <img
-                  src={user.avatar}
-                  alt={user.name}
+                  src={user.imageUrl}
+                  alt={user.fullName || 'User'}
                   className="w-10 h-10 rounded-full"
                 />
               ) : (
                 <div className="w-10 h-10 bg-gradient-to-br from-purple-400 to-pink-400 rounded-full flex items-center justify-center text-white font-bold">
-                  {user.name?.charAt(0) || user.email?.charAt(0)}
+                  {user.firstName?.charAt(0) || 'U'}
                 </div>
               )}
               <div className="flex-1 min-w-0">
-                <p className="font-medium text-sm truncate">{user.name || 'User'}</p>
-                <p className="text-xs text-gray-500 truncate">{user.email}</p>
+                <p className="font-medium text-sm truncate">
+                  {user.fullName || 'User'}
+                </p>
+                <p className="text-xs text-gray-500 truncate">
+                  {user.primaryEmailAddress?.emailAddress}
+                </p>
               </div>
             </div>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={handleLogout}
-              className="w-full flex items-center gap-2"
-            >
-              <LogOut className="w-4 h-4" />
-              Logout
-            </Button>
+            <SignOutButton>
+              <Button
+                variant="outline"
+                size="sm"
+                className="w-full flex items-center gap-2"
+              >
+                <LogOut className="w-4 h-4" />
+                Logout
+              </Button>
+            </SignOutButton>
           </div>
         </div>
       </aside>
@@ -213,23 +185,21 @@ export default function DashboardLayout({
             <div className="flex-1 lg:flex-none" />
 
             <div className="flex items-center gap-3">
-              {/* Notifications */}
               <Button variant="ghost" size="icon" className="relative">
                 <Bell className="w-5 h-5" />
                 <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full" />
               </Button>
 
-              {/* User Avatar (Desktop) */}
               <div className="hidden lg:flex items-center gap-2">
-                {user.avatar ? (
+                {user.imageUrl ? (
                   <img
-                    src={user.avatar}
-                    alt={user.name}
+                    src={user.imageUrl}
+                    alt={user.fullName || 'User'}
                     className="w-8 h-8 rounded-full"
                   />
                 ) : (
                   <div className="w-8 h-8 bg-gradient-to-br from-purple-400 to-pink-400 rounded-full flex items-center justify-center text-white font-bold text-sm">
-                    {user.name?.charAt(0) || user.email?.charAt(0)}
+                    {user.firstName?.charAt(0) || 'U'}
                   </div>
                 )}
               </div>
@@ -251,3 +221,35 @@ export default function DashboardLayout({
     </div>
   );
 }
+```
+
+## 📂 Your Final File Structure Should Be:
+```{/* 
+app/
+├── layout.tsx                    ← Root layout (ClerkProvider)
+├── page.tsx                      ← Landing page
+├── globals.css
+├── (auth)/
+│   ├── sign-in/
+│   │   └── [[...sign-in]]/
+│   │       └── page.tsx
+│   └── sign-up/
+│       └── [[...sign-up]]/
+│           └── page.tsx
+└── (dashboard)/
+    ├── layout.tsx                ← Dashboard layout (Sidebar)
+    ├── user/
+    │   ├── page.tsx
+    │   ├── tasks/page.tsx
+    │   ├── pending/page.tsx
+    │   ├── analytics/page.tsx
+    │   └── settings/page.tsx
+    └── admin/
+        ├── page.tsx
+        ├── users/page.tsx
+        ├── assign/page.tsx
+        ├── tasks/page.tsx
+        ├── reports/page.tsx
+        └── settings/page.tsx
+
+        */}
