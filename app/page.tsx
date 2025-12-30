@@ -140,6 +140,8 @@ export default function LandingPage() {
         </motion.div>
       </section>
 
+      <SignOutButton />
+
       {/* Features Section */}
       <section className="container mx-auto px-4 py-20">
         <motion.div

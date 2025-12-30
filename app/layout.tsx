@@ -17,7 +17,8 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body>
+        {/* Keep any existing components you have here */}
         <SessionProvider>
           {children}
         </SessionProvider>
