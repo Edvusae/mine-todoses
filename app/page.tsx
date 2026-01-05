@@ -1,4 +1,3 @@
-// app/page.tsx
 'use client';
 
 import { useState } from 'react';
@@ -65,13 +64,13 @@ export default function LandingPage() {
               className="flex gap-4"
             >
               <Link
-                href="/login"
+                href="/signin"
                 className="px-6 py-2 text-white hover:bg-white/20 rounded-lg transition"
               >
                 Sign In
               </Link>
               <Link
-                href="/login"
+                href="/signup"
                 className="px-6 py-2 bg-white text-purple-600 font-semibold rounded-lg hover:bg-gray-100 transition shadow-lg"
               >
                 Get Started
@@ -102,7 +101,7 @@ export default function LandingPage() {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/login">
+            <Link href="/signup">
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
@@ -139,8 +138,6 @@ export default function LandingPage() {
           ))}
         </motion.div>
       </section>
-
-      <SignOutButton />
 
       {/* Features Section */}
       <section className="container mx-auto px-4 py-20">
@@ -213,7 +210,7 @@ export default function LandingPage() {
             Join thousands of teams already using ProDev to manage their tasks
             and boost productivity.
           </p>
-          <Link href="/login">
+          <Link href="/signup">
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
@@ -257,4 +254,3 @@ export default function LandingPage() {
   );
 }
 
-// lib/utils.ts
