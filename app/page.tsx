@@ -235,7 +235,7 @@ export default function LandingPage() {
             <span className="text-white font-semibold">ProDev Task Manager</span>
           </div>
           <div className="text-white/60">
-            © 2025 ProDev. All rights reserved.
+            © 2026 ProDev. All rights reserved.
           </div>
           <div className="flex gap-6">
             <a href="#" className="text-white/60 hover:text-white transition">
