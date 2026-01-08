@@ -7,7 +7,7 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Task Management App",
-  description: "Advanced task management system with role-based access",
+  description: "Advanced task management system",
 };
 
 export default function RootLayout({
@@ -17,8 +17,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>
-        {/* Keep any existing components you have here */}
+      <body className={inter.className}>
         <SessionProvider>
           {children}
         </SessionProvider>
