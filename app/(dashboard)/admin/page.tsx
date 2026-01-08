@@ -3,21 +3,16 @@ import { authOptions } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import UserInfo from "@/components/UserInfo";
 import SignOutButton from "@/components/SignOutButton";
-// In your existing dashboard files, add at the top:
-import SignOutButton from "@/components/SignOutButton";
-
-// Then add the button somewhere in your UI:
-<SignOutButton />
 
 export default async function AdminDashboard() {
   const session = await getServerSession(authOptions);
 
   if (!session) {
-    redirect("/signin");
+    redirect("/sign-in");
   }
 
   if (session.user.role !== "admin") {
-    redirect("/dashboard/user");
+    redirect("/user");
   }
 
   return (
