@@ -6,8 +6,8 @@ import { MOCK_USERS } from '@/lib/mock-data';
 import { User } from '@/types';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Input } from '../../../components/ui/input';
-import { Badge } from '../../../components/ui/badge';
+import { Input } from '@/components/ui/input';
+import { Badge } from '@/components/ui/badge';
 import {
   Search,
   UserPlus,
@@ -163,7 +163,6 @@ export default function AdminUsersPage() {
                           alt={user.name}
                           className="w-12 h-12 rounded-full"
                         />
-
                       ) : (
                         <div className="w-12 h-12 bg-gradient-to-br from-purple-400 to-pink-400 rounded-full flex items-center justify-center text-white font-bold text-lg">
                           {user.name.charAt(0)}
@@ -261,4 +260,3 @@ export default function AdminUsersPage() {
     </div>
   );
 }
-
