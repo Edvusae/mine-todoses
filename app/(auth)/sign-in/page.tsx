@@ -32,9 +32,11 @@ export default function SignInPage() {
       if (result?.error) {
         setError(result.error);
       } else {
+        // Fetch session to determine user role
         const response = await fetch('/api/auth/session');
         const session = await response.json();
         
+        // Redirect based on role
         if (session?.user?.role === 'admin') {
           router.push('/admin');
         } else {
