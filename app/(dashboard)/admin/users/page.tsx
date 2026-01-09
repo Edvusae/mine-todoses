@@ -31,6 +31,8 @@ export default function AdminUsersPage() {
   const handleInviteUser = () => {
     console.log('Invite user');
     // TODO: Implement invite modal
+
+  
   };
 
   return (
