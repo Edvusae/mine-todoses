@@ -1,6 +1,13 @@
 // lib/utils.ts
 // Utility functions used throughout the app
 
+import { type ClassValue, clsx } from "clsx"
+import { twMerge } from "tailwind-merge"
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs))
+}
+
 import { type ClassValue, clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 import { TaskPriority, TaskStatus } from '@/types';
