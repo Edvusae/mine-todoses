@@ -1,0 +1,29 @@
+#!/bin/bash
+
+echo "🚀 Installing missing dependencies for Task Management App..."
+echo ""
+
+# Check if npm is installed
+if ! command -v npm &> /dev/null
+then
+    echo "❌ npm is not installed. Please install Node.js first."
+    exit 1
+fi
+
+echo "📦 Installing packages..."
+npm install class-variance-authority clsx lucide-react mongoose recharts tailwind-merge date-fns tailwindcss-animate
+
+if [ $? -eq 0 ]; then
+    echo ""
+    echo "✅ All dependencies installed successfully!"
+    echo ""
+    echo "📋 Next steps:"
+    echo "1. Copy all the provided files to their correct locations"
+    echo "2. Update your .env.local with your MongoDB URI"
+    echo "3. Run 'npm run dev' to start the development server"
+    echo ""
+else
+    echo ""
+    echo "❌ Installation failed. Please check the errors above."
+    exit 1
+fi
